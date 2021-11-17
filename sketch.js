@@ -1,29 +1,29 @@
 var Rexinho, RexinhoCorrendo;
-
+var lugardopezinho, lugardopezinhochaozinho;
 function preload(){
-
-  RexinhoCorrendo = loadAnimation("trex1.png", "trex3.png", "trex4.png");
+RexinhoCorrendo = loadAnimation("trex1.png", "trex3.png", "trex4.png");
+lugardopezinhochaozinho = loadImage("ground2.png");
 }
-
 function setup(){
-  createCanvas(600,200);
-  Rexinho = createSprite(50,160,20,50);
-  Rexinho.addAnimation("correndo", RexinhoCorrendo);
-  Rexinho.scale = 0.5;
-
-  borda = createEdgeSprites();
+createCanvas(600,200);
+Rexinho = createSprite(50,160,20,50);
+Rexinho.addAnimation("correndo", RexinhoCorrendo);
+Rexinho.scale = 0.5;
+lugardopezinho= createSprite(200, 180, 400, 20);
+lugardopezinho.addImage("pezinhodolugar", lugardopezinhochaozinho)
+lugardopezinho.x = lugardopezinho.width / 2;
+borda = createEdgeSprites();
 }
-
-
 function draw(){
-  background("white");
-
-  if(keyDown("space")){
-    Rexinho.velocityY = -10;
-  }
-  Rexinho.velocityY = Rexinho.velocityY + 1;
-
-  Rexinho.collide(borda[3]);
-
-  drawSprites();
+background("white");
+lugardopezinho.velocityX = -2
+if (lugardopezinho.x < 0){
+lugardopezinho.x = lugardopezinho.width / 2;
+}
+if(keyDown("space")){
+Rexinho.velocityY = -10;
+}
+Rexinho.velocityY = Rexinho.velocityY + 1;
+Rexinho.collide(lugardopezinho);
+drawSprites();
 }
