@@ -4,6 +4,9 @@ var lugardopezinho, lugardopezinhochaozinho;
 
 var chaozinhoinvisivel;
 
+var umanuvenzinha;
+
+var inuvenzinha;
 
 function preload(){
 
@@ -11,6 +14,7 @@ function preload(){
 
     lugardopezinhochaozinho = loadImage("ground2.png");
 
+    inuvenzinha = loadImage("cloud.png");
 }
 
 
@@ -38,6 +42,8 @@ function setup(){
     //var numero = Math.round(random(1,50));
 
     //console.log(numero);
+
+    //console.log("Oi"+5);
 }
 
 
@@ -47,6 +53,8 @@ function draw(){
 
     //console.log (Rexinho.y);
 
+    //console.log (frameCount);
+    
     lugardopezinho.velocityX = -2
     
     if (lugardopezinho.x < 0){
@@ -70,5 +78,23 @@ function draw(){
 }
 
 function nuvenhador(){
+
+    if (frameCount%60===0){
+
+        umanuvenzinha=createSprite (600, 100, 40, 10);
+
+        umanuvenzinha.addImage (inuvenzinha);
+
+        umanuvenzinha.velocityX=-3;
+
+        umanuvenzinha.depth=Rexinho.depth;
+
+        Rexinho.depth=Rexinho.depth+1;
+
+        umanuvenzinha.y=Math.round(random(10,101));
+
+        umanuvenzinha.lifetime = 250;
+
+    }
 
 }
