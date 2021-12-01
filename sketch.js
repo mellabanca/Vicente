@@ -74,6 +74,9 @@ function setup(){
 
     grudodosobstaculos = new Group();
 
+    //Rexinho.debug = true;
+    Rexinho.setCollider("circle", 0,0,35);
+
 }
 
 
@@ -83,39 +86,50 @@ function draw(){
 
     text ("mortinhas:"+pontinho, 501, 51);
 
-    pontinho = pontinho+Math.round(frameCount/60);
-    
     if(estadoJogandinho === jogandinho){
 
         lugardopezinho.velocityX = -2;
 
+        pontinho = pontinho+Math.round(frameCount/60);
+
+        if (lugardopezinho.x < 0){
+
+            lugardopezinho.x = lugardopezinho.width / 2;
+        }
+    
+        if(keyDown("space") && Rexinho.y >= 150){
+    
+            Rexinho.velocityY = -10;
+    
+        }
+
+        Rexinho.velocityY = Rexinho.velocityY + 1;
+
+        nuvenhador();
+
+        geraculador();
+
+        if (grudodosobstaculos.isTouching (Rexinho)){
+
+            estadoJogandinho = naumjogandinho;
+
+        }
+
     } else if(estadoJogandinho === naumjogandinho){
 
         lugardopezinho.velocityX = 0;
+
+        grudodosobstaculos.setVelocityXEach (0);
+        
+        grupodanuvenzinha.setVelocityXEach (0);
 
     }
 
     //console.log (Rexinho.y);
 
     //console.log (frameCount);
-    
-    if (lugardopezinho.x < 0){
-
-        lugardopezinho.x = lugardopezinho.width / 2;
-    }
-
-    if(keyDown("space") && Rexinho.y >= 150){
-
-        Rexinho.velocityY = -10;
-
-    }
-    Rexinho.velocityY = Rexinho.velocityY + 1;
 
     Rexinho.collide(chaozinhoinvisivel);
-
-    nuvenhador();
-
-    geraculador();
 
     drawSprites();
 
@@ -181,7 +195,7 @@ function geraculador(){
 
         umobstaculinho.scale = 0.4;
 
-        grupodosobstaculos.add(umobstaculinho);
+        grudodosobstaculos.add(umobstaculinho);
 
         umobstaculinho.lifetime = 251;
 
