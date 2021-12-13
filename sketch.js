@@ -1,4 +1,4 @@
-var Rexinho, RexinhoCorrendo;
+var Rexinho, RexinhoCorrendo, Morrinho;
 
 var lugardopezinho, lugardopezinhochaozinho;
 
@@ -8,7 +8,7 @@ var umanuvenzinha, grupodanuvenzinha;
 
 var inuvenzinha;
 
-var b1, b2, b3, b4, b5, b6, grudodosobstaculos;
+var b1, b2, b3, b4, b5, b6, grupodosobstaculos;
 
 var pontinho = 0;
 
@@ -18,10 +18,24 @@ var naumjogandinho = 0;
 
 var estadoJogandinho = jogandinho;
 
+var gamiuvir, igamiuvir;
+
+var ristarti, iristarti;
+
+var pulinho;
+
+var mortinho;
+
+var salvinho;
+
+var mensagem = "Isso é uma mensagem";
+
 
 function preload(){
 
     RexinhoCorrendo = loadAnimation("trex1.png", "trex3.png", "trex4.png");
+
+    Morrinho = loadAnimation("trex_collided.png");
 
     lugardopezinhochaozinho = loadImage("ground2.png");
 
@@ -39,6 +53,16 @@ function preload(){
 
     b6 = loadImage("obstacle6.png");
 
+    igamiuvir = loadImage ("gameOver.png");
+
+    iristarti = loadImage ("restart.png");
+
+    pulinho = loadSound ("jump.mp3");
+
+    mortinho = loadSound ("die.mp3");
+
+    salvinho = loadSound ("checkPoint.mp3");
+
 }
 
 
@@ -50,7 +74,21 @@ function setup(){
 
     Rexinho.addAnimation("correndo", RexinhoCorrendo);
 
+    Rexinho.addAnimation("uhu", Morrinho);
+
     Rexinho.scale = 0.5;
+
+    gamiuvir = createSprite (300, 100);
+
+    gamiuvir.addImage (igamiuvir);
+
+    ristarti = createSprite (300, 140);
+
+    ristarti.addImage (iristarti);
+
+    gamiuvir.scale = 0.5;
+
+    ristarti.scale = 0.5;
 
     lugardopezinho= createSprite(200, 180, 400, 20);
 
@@ -72,7 +110,7 @@ function setup(){
 
     grupodanuvenzinha = new Group();
 
-    grudodosobstaculos = new Group();
+    grupodosobstaculos = new Group();
 
     //Rexinho.debug = true;
     Rexinho.setCollider("circle", 0,0,35);
@@ -82,15 +120,21 @@ function setup(){
 
 function draw(){
 
+    //console.log(mensagem);
+
     background("white");
 
-    text ("mortinhas:"+pontinho, 501, 51);
+    text ("pontinhus:"+pontinho, 501, 51);
 
     if(estadoJogandinho === jogandinho){
 
-        lugardopezinho.velocityX = -2;
+        lugardopezinho.velocityX = -(2+pontinho/100);
 
         pontinho = pontinho+Math.round(frameCount/60);
+
+        if (pontinho > 0 && pontinho %100 === 0){
+            salvinho.play ();
+        }
 
         if (lugardopezinho.x < 0){
 
@@ -99,7 +143,9 @@ function draw(){
     
         if(keyDown("space") && Rexinho.y >= 150){
     
-            Rexinho.velocityY = -10;
+            Rexinho.velocityY = -12;
+
+            pulinho.play ();
     
         }
 
@@ -109,9 +155,11 @@ function draw(){
 
         geraculador();
 
-        if (grudodosobstaculos.isTouching (Rexinho)){
+        if (grupodosobstaculos.isTouching (Rexinho)){
 
             estadoJogandinho = naumjogandinho;
+
+            mortinho.play ();
 
         }
 
@@ -119,7 +167,15 @@ function draw(){
 
         lugardopezinho.velocityX = 0;
 
-        grudodosobstaculos.setVelocityXEach (0);
+        Rexinho.velocityY = 0;
+
+        Rexinho.changeAnimation ("uhu", Morrinho);
+
+        grupodosobstaculos.setLifetimeEach (-1);
+
+        grupodanuvenzinha.setLifetimeEach (-1);
+
+        grupodosobstaculos.setVelocityXEach (0);
         
         grupodanuvenzinha.setVelocityXEach (0);
 
@@ -131,8 +187,16 @@ function draw(){
 
     Rexinho.collide(chaozinhoinvisivel);
 
+    if(mousePressedOver(ristarti)){
+        resetador();
+    }
+
     drawSprites();
 
+}
+
+function resetador(){
+    
 }
 
 function nuvenhador(){
@@ -166,7 +230,7 @@ function geraculador(){
 
         var umobstaculinho = createSprite (600, 165, 10, 40) ;
 
-        umobstaculinho.velocityX = -6;
+        umobstaculinho.velocityX = -(6+pontinho/100) ;
 
         var v1 = Math.round (random(1,6));
 
@@ -195,9 +259,9 @@ function geraculador(){
 
         umobstaculinho.scale = 0.4;
 
-        grudodosobstaculos.add(umobstaculinho);
+        grupodosobstaculos.add(umobstaculinho);
 
-        umobstaculinho.lifetime = 251;
+        umobstaculinho.lifetime = 250;
 
 
 
