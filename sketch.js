@@ -68,9 +68,9 @@ function preload(){
 
 function setup(){
 
-    createCanvas(600,200);
+    createCanvas(windowWidth,windowHeight);
 
-    Rexinho = createSprite(50,160,20,50);
+    Rexinho = createSprite(50,height-70,20,50);
 
     Rexinho.addAnimation("correndo", RexinhoCorrendo);
 
@@ -78,11 +78,11 @@ function setup(){
 
     Rexinho.scale = 0.5;
 
-    gamiuvir = createSprite (300, 100);
+    gamiuvir = createSprite (width/2, height/2-50);
 
     gamiuvir.addImage (igamiuvir);
 
-    ristarti = createSprite (300, 140);
+    ristarti = createSprite (width/2, height/2);
 
     ristarti.addImage (iristarti);
 
@@ -90,7 +90,7 @@ function setup(){
 
     ristarti.scale = 0.5;
 
-    lugardopezinho= createSprite(200, 180, 400, 20);
+    lugardopezinho= createSprite(width/2, height-80, width, 125);
 
     lugardopezinho.addImage("pezinhodolugar", lugardopezinhochaozinho)
 
@@ -98,7 +98,7 @@ function setup(){
 
     borda = createEdgeSprites();
 
-    chaozinhoinvisivel = createSprite(100, 190, 400, 10); 
+    chaozinhoinvisivel = createSprite(width/2, height-10, width, 125); 
 
     chaozinhoinvisivel.visible = false;
 
@@ -128,9 +128,13 @@ function draw(){
 
     if(estadoJogandinho === jogandinho){
 
+        gamiuvir.visible = false;
+    
+        ristarti.visible = false;
+
         lugardopezinho.velocityX = -(2+pontinho/100);
 
-        pontinho = pontinho+Math.round(frameCount/60);
+        pontinho = pontinho+Math.round(frameRate()/60);
 
         if (pontinho > 0 && pontinho %100 === 0){
             salvinho.play ();
@@ -141,11 +145,13 @@ function draw(){
             lugardopezinho.x = lugardopezinho.width / 2;
         }
     
-        if(keyDown("space") && Rexinho.y >= 150){
+        if(keyDown("space") || touches > 0 && Rexinho.y >= 150){
     
             Rexinho.velocityY = -12;
 
             pulinho.play ();
+
+            touches = [];
     
         }
 
@@ -171,6 +177,10 @@ function draw(){
 
         Rexinho.changeAnimation ("uhu", Morrinho);
 
+        gamiuvir.visible = true;
+    
+        ristarti.visible = true;
+
         grupodosobstaculos.setLifetimeEach (-1);
 
         grupodanuvenzinha.setLifetimeEach (-1);
@@ -178,6 +188,10 @@ function draw(){
         grupodosobstaculos.setVelocityXEach (0);
         
         grupodanuvenzinha.setVelocityXEach (0);
+
+        if(mousePressedOver(ristarti)){
+            resetador();
+        }
 
     }
 
@@ -187,23 +201,32 @@ function draw(){
 
     Rexinho.collide(chaozinhoinvisivel);
 
-    if(mousePressedOver(ristarti)){
-        resetador();
-    }
-
     drawSprites();
 
 }
 
 function resetador(){
-    
+
+    estadoJogandinho = jogandinho;
+
+    gamiuvir.visible = false;
+
+    ristarti.visible = false;
+
+    grupodanuvenzinha.destroyEach();
+
+    grupodosobstaculos.destroyEach();
+
+    Rexinho.changeAnimation ("correndo", RexinhoCorrendo);
+
+    pontinho = 0;
 }
 
 function nuvenhador(){
 
     if (frameCount%60===0){
 
-        umanuvenzinha=createSprite (600, 100, 40, 10);
+        umanuvenzinha=createSprite (width+20, height-300, 40, 10);
 
         umanuvenzinha.addImage (inuvenzinha);
 
@@ -215,7 +238,7 @@ function nuvenhador(){
 
         grupodanuvenzinha.add(umanuvenzinha);
 
-        umanuvenzinha.y=Math.round(random(10,101));
+        umanuvenzinha.y=Math.round(random(10,height/2));
 
         umanuvenzinha.lifetime = 250;
 
@@ -228,7 +251,7 @@ function geraculador(){
 
     if (frameCount%60===0){
 
-        var umobstaculinho = createSprite (600, 165, 10, 40) ;
+        var umobstaculinho = createSprite (width, height-95, 10, 40) ;
 
         umobstaculinho.velocityX = -(6+pontinho/100) ;
 
